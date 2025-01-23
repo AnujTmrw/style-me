@@ -7,6 +7,12 @@ const styles = {
     padding: "20px",
     maxWidth: "1200px",
     margin: "0 auto",
+    minHeight: "100vh",
+  },
+  pageWrapper: {
+    background: "linear-gradient(to bottom right, #f8f9fa, #e9ecef)",
+    minHeight: "100vh",
+    width: "100%",
   },
   grid: {
     display: "grid",
@@ -48,15 +54,17 @@ const styles = {
 const ProductListingPage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
   // Fetch products (mock API)
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/random-products");
+        const response = await fetch(
+          "http://localhost:3001/api/random-products"
+        );
         const data = await response.json();
-        console.log({data})
+        console.log({ data });
         setProducts(data?.data);
         setLoading(false);
       } catch (error) {
@@ -68,27 +76,31 @@ const ProductListingPage = () => {
   }, []);
 
   return (
-    <div style={styles.container}>
-      <h1>Product Listing Page</h1>
-      {loading ? (
-        <p>Loading products...</p>
-      ) : (
-        <div style={styles.grid}>
-          {products.map((product) => (
-            <div key={product.style_id} style={styles.card} onClick={()=>{
-                navigate(`/product/${product.style_id}`)
-            }}>
-              <img
-                src={product.image_url}
-                alt={'image'}
-                style={styles.img}
-              />
-              <h3 style={styles.title}>{`${product?.sub_category} ${product?.category}`}</h3>
-              {/* <p>${product.mrp.toFixed(2)}</p> */}
-            </div>
-          ))}
-        </div>
-      )}
+    <div style={styles.pageWrapper}>
+      <div style={styles.container}>
+        <h1>Product Listing Page</h1>
+        {loading ? (
+          <p>Loading products...</p>
+        ) : (
+          <div style={styles.grid}>
+            {products.map((product) => (
+              <div
+                key={product.style_id}
+                style={styles.card}
+                onClick={() => {
+                  navigate(`/product/${product.style_id}`);
+                }}
+              >
+                <img src={product.image_url} alt={"image"} style={styles.img} />
+                <h3
+                  style={styles.title}
+                >{`${product?.sub_category} ${product?.category}`}</h3>
+                {/* <p>${product.mrp.toFixed(2)}</p> */}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
