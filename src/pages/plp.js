@@ -22,8 +22,17 @@ const styles = {
   },
   img: {
     maxWidth: "100%",
-    height: "auto",
+    height: "200px",
     borderRadius: "5px",
+  },
+  title: {
+    fontSize: "16px",
+    fontWeight: "bold",
+    margin: "10px 0",
+    height: "40px", // Fixed height for the title
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap", // Prevent text wrapping
   },
   button: {
     marginTop: "10px",
@@ -73,9 +82,9 @@ const ProductListingPage = () => {
                 alt={product.title}
                 style={styles.img}
               />
-              <h3>{product.title}</h3>
+              <h3 style={styles.title}>{product.title}</h3>
               <p>${product.price.toFixed(2)}</p>
-              <button style={styles.button}>Add to Cart</button>
+              {/* <button style={styles.button}>Add to Cart</button> */}
             </div>
           ))}
         </div>
