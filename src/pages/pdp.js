@@ -184,11 +184,11 @@ const ProductDetailsPage = () => {
   const fetchSuggestedProducts = async () => {
     try {
       const response = await fetch(
-        `https://fakestoreapi.com/products/category/${product.category}`
+        `http://localhost:3001/recommendations/${productId}`
       );
       const data = await response.json();
       setSuggestedProducts(
-        data.filter((item) => item.id !== product.id).slice(0, 5)
+        data.recommendedProducts
       );
     } catch (error) {
       console.error("Failed to fetch suggested products:", error);
@@ -222,7 +222,7 @@ const ProductDetailsPage = () => {
           <img src={product.image_url} alt={product.title} style={styles.img} />
           <div style={styles.details}>
             <h2>{`${product?.sub_category} ${product?.category}`}</h2>
-            <p style={styles.price}>${product.mrp}</p>
+            <p style={styles.price}>₹{product.mrp}</p>
             {/* <p>{product.description}</p> */}
             <p>
               <strong>Category:</strong> {product.category}
@@ -266,28 +266,28 @@ const ProductDetailsPage = () => {
             </div>
           </div>
         </div>
-        <div style={styles.suggestedSection}>
+        {suggestedProducts.length>0&&<div style={styles.suggestedSection}>
           <h3 style={styles.suggestedTitle}>Suggested Combinations</h3>
           <div style={styles.suggestedGrid}>
             {suggestedProducts.map((item) => (
-              <div key={item.id} style={styles.suggestedProduct}>
+              <div key={item.style_id} style={styles.suggestedProduct}>
                 <img
-                  src={item.image}
-                  alt={item.title}
+                  src={item.image_url}
+                  alt={`${product?.sub_category} ${product?.category}`}
                   style={styles.suggestedImg}
                 />
-                <h4>{item.title.substring(0, 50)}...</h4>
-                <p style={styles.price}>${item.price.toFixed(2)}</p>
+                <h4>{`${product?.sub_category} ${product?.category}`.substring(0, 50)}</h4>
+                <p style={styles.price}>₹{item.mrp}</p>
                 <button
                   style={styles.button}
-                  onClick={() => navigate(`/product/${item.id}`)}
+                  onClick={() => navigate(`/product/${item.style_id}`)}
                 >
                   Go to Product
                 </button>
               </div>
             ))}
           </div>
-        </div>
+        </div>}
       </div>
     </div>
   );

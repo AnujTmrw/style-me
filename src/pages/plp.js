@@ -61,7 +61,7 @@ const ProductListingPage = () => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/api/random-products"
+          "http://localhost:3001/api/products"
         );
         const data = await response.json();
         console.log({ data });
@@ -95,7 +95,7 @@ const ProductListingPage = () => {
                 <h3
                   style={styles.title}
                 >{`${product?.sub_category} ${product?.category}`}</h3>
-                {/* <p>${product.mrp.toFixed(2)}</p> */}
+                <p>₹{product.mrp}</p>
               </div>
             ))}
           </div>
