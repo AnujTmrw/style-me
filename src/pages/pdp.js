@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { FaMagic } from "react-icons/fa"; // Importing the magic wand icon from react-icons
 
-
 // Sample styles
 const styles = {
   container: {
@@ -30,7 +29,37 @@ const styles = {
     fontWeight: "bold",
     color: "#007BFF",
   },
-  
+  description: {
+    marginTop: "20px",
+    padding: "15px",
+    backgroundColor: "#f9f9f9",
+    borderRadius: "5px",
+    lineHeight: "1.6",
+    fontSize: "16px",
+    color: "#333",
+    boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+    overflow: "hidden",
+    maxHeight: "150px", // Collapsed height
+    transition: "max-height 0.3s ease",
+  },
+  expandedDescription: {
+    maxHeight: "none", // Expanded height
+  },
+  toggleButton: {
+    marginTop: "10px",
+    padding: "5px 10px",
+    fontSize: "14px",
+    backgroundColor: "#007BFF",
+    color: "#fff",
+    border: "none",
+    borderRadius: "3px",
+    cursor: "pointer",
+    transition: "background-color 0.3s",
+  },
+  toggleButtonHover: {
+    backgroundColor: "#0056b3",
+  },
+
   button: {
     display: "flex",
     alignItems: "center",
@@ -39,7 +68,7 @@ const styles = {
     marginTop: "15px",
     padding: "10px 15px",
     border: "none",
-    fontSize:'16px',
+    fontSize: "16px",
     backgroundColor: "#007BFF",
     color: "#fff",
     borderRadius: "5px",
@@ -84,6 +113,8 @@ const ProductDetailsPage = () => {
   const { productId } = useParams(); // Get product ID from URL
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+
   const navigate = useNavigate();
 
   // Fetch product details
@@ -91,10 +122,10 @@ const ProductDetailsPage = () => {
     const fetchProduct = async () => {
       try {
         const response = await fetch(
-          `https://fakestoreapi.com/products/${productId}`
+          `http://localhost:3001/api/product?style_id=${productId}`
         );
         const data = await response.json();
-        setProduct(data);
+        setProduct(data.product);
         setLoading(false);
       } catch (error) {
         console.error("Failed to fetch product details:", error);
@@ -126,31 +157,50 @@ const ProductDetailsPage = () => {
         Back
       </button>
       <div style={styles.product}>
-        <img src={product.image} alt={product.title} style={styles.img} />
+        <img src={product.image_url} alt={product.title} style={styles.img} />
         <div style={styles.details}>
-          <h2>{product.title}</h2>
-          <p style={styles.price}>${product.price.toFixed(2)}</p>
-          <p>{product.description}</p>
+          <h2>{`${product?.sub_category} ${product?.category}`}</h2>
+          <p style={styles.price}>${product.mrp}</p>
+          {/* <p>{product.description}</p> */}
           <p>
             <strong>Category:</strong> {product.category}
           </p>
-          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+          <div
+            style={{
+              ...styles.description,
+              ...(isDescriptionExpanded && styles.expandedDescription),
+            }}
+          >
+            Slim-fitting style, contrast raglan long sleeve, three-button henley
+            placket, light weight & soft fabric for breathable and comfortable
+            wearing. And Solid stitched shirts with round neck made for
+            durability and a great fit for casual fashion wear and diehard
+            baseball fans. The Henley style round neckline includes a
+            three-button placket.
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
             <button style={styles.button}>Add to Cart</button>
             <button
-                    style={styles.button2}
-                    onMouseEnter={(e) => {
-                        e.target.style.boxShadow = styles.button2Hover.boxShadow;
-                        e.target.style.transform = styles.button2Hover.transform;
-                    }}
-                    onMouseLeave={(e) => {
-                        e.target.style.boxShadow = styles.button2.boxShadow;
-                        e.target.style.transform = "scale(1)";
-                    }}
-                    >
-                    <FaMagic style={{ fontSize: "18px" }} /> {/* Magic wand icon */}
-                    Style Me
-                </button>
-            </div>
+              style={styles.button2}
+              onMouseEnter={(e) => {
+                e.target.style.boxShadow = styles.button2Hover.boxShadow;
+                e.target.style.transform = styles.button2Hover.transform;
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.boxShadow = styles.button2.boxShadow;
+                e.target.style.transform = "scale(1)";
+              }}
+            >
+              <FaMagic style={{ fontSize: "18px" }} /> {/* Magic wand icon */}
+              Style Me
+            </button>
+          </div>
         </div>
       </div>
     </div>

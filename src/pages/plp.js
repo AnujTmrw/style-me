@@ -54,9 +54,10 @@ const ProductListingPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("https://fakestoreapi.com/products");
+        const response = await fetch("http://localhost:3001/api/random-products");
         const data = await response.json();
-        setProducts(data);
+        console.log({data})
+        setProducts(data?.data);
         setLoading(false);
       } catch (error) {
         console.error("Failed to fetch products:", error);
@@ -74,17 +75,16 @@ const ProductListingPage = () => {
       ) : (
         <div style={styles.grid}>
           {products.map((product) => (
-            <div key={product.id} style={styles.card} onClick={()=>{
-                navigate(`/product/${product.id}`)
+            <div key={product.style_id} style={styles.card} onClick={()=>{
+                navigate(`/product/${product.style_id}`)
             }}>
               <img
-                src={product.image}
-                alt={product.title}
+                src={product.image_url}
+                alt={'image'}
                 style={styles.img}
               />
-              <h3 style={styles.title}>{product.title}</h3>
-              <p>${product.price.toFixed(2)}</p>
-              {/* <button style={styles.button}>Add to Cart</button> */}
+              <h3 style={styles.title}>{`${product?.sub_category} ${product?.category}`}</h3>
+              {/* <p>${product.mrp.toFixed(2)}</p> */}
             </div>
           ))}
         </div>
