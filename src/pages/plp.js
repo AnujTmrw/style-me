@@ -7,6 +7,12 @@ const styles = {
     padding: "20px",
     maxWidth: "1200px",
     margin: "0 auto",
+    minHeight: "100vh",
+  },
+  pageWrapper: {
+    background: "linear-gradient(to bottom right, #f8f9fa, #e9ecef)",
+    minHeight: "100vh",
+    width: "100%",
   },
   grid: {
     display: "grid",
@@ -67,28 +73,30 @@ const ProductListingPage = () => {
   }, []);
 
   return (
-    <div style={styles.container}>
-      <h1>Product Listing Page</h1>
-      {loading ? (
-        <p>Loading products...</p>
-      ) : (
-        <div style={styles.grid}>
-          {products.map((product) => (
-            <div key={product.id} style={styles.card} onClick={()=>{
-                navigate(`/product/${product.id}`)
-            }}>
-              <img
-                src={product.image}
-                alt={product.title}
-                style={styles.img}
-              />
-              <h3 style={styles.title}>{product.title}</h3>
-              <p>${product.price.toFixed(2)}</p>
-              {/* <button style={styles.button}>Add to Cart</button> */}
-            </div>
-          ))}
-        </div>
-      )}
+    <div style={styles.pageWrapper}>
+      <div style={styles.container}>
+        <h1>Product Listing Page</h1>
+        {loading ? (
+          <p>Loading products...</p>
+        ) : (
+          <div style={styles.grid}>
+            {products.map((product) => (
+              <div key={product.id} style={styles.card} onClick={()=>{
+                  navigate(`/product/${product.id}`)
+              }}>
+                <img
+                  src={product.image}
+                  alt={product.title}
+                  style={styles.img}
+                />
+                <h3 style={styles.title}>{product.title}</h3>
+                <p>${product.price.toFixed(2)}</p>
+                {/* <button style={styles.button}>Add to Cart</button> */}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
