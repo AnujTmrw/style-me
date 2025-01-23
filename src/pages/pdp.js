@@ -180,21 +180,17 @@ const ProductDetailsPage = () => {
   }, [productId]);
 
   // Fetch suggested products
-  
   const fetchSuggestedProducts = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3001/recommendations/${productId}`
+        `http://localhost:3001/recommendations/${productId}?gender=${product?.gender}`
       );
       const data = await response.json();
-      setSuggestedProducts(
-        data.recommendedProducts
-      );
+      setSuggestedProducts(data.recommendedProducts);
     } catch (error) {
       console.error("Failed to fetch suggested products:", error);
     }
   };
-
 
   if (loading) {
     return (
@@ -258,7 +254,9 @@ const ProductDetailsPage = () => {
                   e.target.style.boxShadow = styles.button2.boxShadow;
                   e.target.style.transform = "scale(1)";
                 }}
-                onClick={()=>{fetchSuggestedProducts()}}
+                onClick={() => {
+                  fetchSuggestedProducts();
+                }}
               >
                 <FaMagic style={{ fontSize: "18px" }} /> {/* Magic wand icon */}
                 Style Me
@@ -266,28 +264,41 @@ const ProductDetailsPage = () => {
             </div>
           </div>
         </div>
-        {suggestedProducts.length>0&&<div style={styles.suggestedSection}>
-          <h3 style={styles.suggestedTitle}>Suggested Combinations</h3>
-          <div style={styles.suggestedGrid}>
-            {suggestedProducts.map((item) => (
-              <div key={item.style_id} style={styles.suggestedProduct}>
-                <img
-                  src={item.image_url}
-                  alt={`${product?.sub_category} ${product?.category}`}
-                  style={styles.suggestedImg}
-                />
-                <h4>{`${product?.sub_category} ${product?.category}`.substring(0, 50)}</h4>
-                <p style={styles.price}>₹{item.mrp}</p>
-                <button
-                  style={styles.button}
-                  onClick={() => navigate(`/product/${item.style_id}`)}
-                >
-                  Go to Product
-                </button>
-              </div>
-            ))}
+        {suggestedProducts?.length > 0 && (
+          <div style={styles.suggestedSection}>
+            <h3 style={styles.suggestedTitle}>Suggested Combinations</h3>
+            <div style={styles.suggestedGrid}>
+              {suggestedProducts.map((item) => {
+                if (item?.style_id) {
+                  return (
+                    <div key={item?.style_id} style={styles.suggestedProduct}>
+                      <img
+                        src={item?.image_url}
+                        alt={`${product?.sub_category} ${product?.category}`}
+                        style={styles.suggestedImg}
+                      />
+                      <h4>
+                        {`${item?.sub_category} ${item?.category}`.substring(
+                          0,
+                          50
+                        )}
+                      </h4>
+                      <p style={styles.price}>₹{item?.mrp}</p>
+                      <button
+                        style={styles.button}
+                        onClick={() => navigate(`/product/${item?.style_id}`)}
+                      >
+                        Go to Product
+                      </button>
+                    </div>
+                  );
+                } else {
+                  return null;
+                }
+              })}
+            </div>
           </div>
-        </div>}
+        )}
       </div>
     </div>
   );
