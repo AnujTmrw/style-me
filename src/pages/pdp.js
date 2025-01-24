@@ -267,36 +267,41 @@ const ProductDetailsPage = () => {
         {suggestedProducts?.length > 0 && (
           <div style={styles.suggestedSection}>
             <h3 style={styles.suggestedTitle}>Suggested Combinations</h3>
-            <div style={styles.suggestedGrid}>
-              {suggestedProducts.map((item) => {
-                if (item?.style_id) {
-                  return (
-                    <div key={item?.style_id} style={styles.suggestedProduct}>
-                      <img
-                        src={item?.image_url}
-                        alt={`${product?.sub_category} ${product?.category}`}
-                        style={styles.suggestedImg}
-                      />
-                      <h4>
-                        {`${item?.sub_category} ${item?.category}`.substring(
-                          0,
-                          50
-                        )}
-                      </h4>
-                      <p style={styles.price}>₹{item?.mrp}</p>
-                      <button
-                        style={styles.button}
-                        onClick={() => navigate(`/product/${item?.style_id}`)}
-                      >
-                        Go to Product
-                      </button>
-                    </div>
-                  );
-                } else {
-                  return null;
-                }
-              })}
-            </div>
+
+            {suggestedProducts.every((item) => item === null) ? (
+              <p style={styles.noRecommendations}>No recommended items found</p>
+            ) : (
+              <div style={styles.suggestedGrid}>
+                {suggestedProducts.map((item) => {
+                  if (item?.style_id) {
+                    return (
+                      <div key={item?.style_id} style={styles.suggestedProduct}>
+                        <img
+                          src={item?.image_url}
+                          alt={`${product?.sub_category} ${product?.category}`}
+                          style={styles.suggestedImg}
+                        />
+                        <h4>
+                          {`${item?.sub_category} ${item?.category}`.substring(
+                            0,
+                            50
+                          )}
+                        </h4>
+                        <p style={styles.price}>₹{item?.mrp}</p>
+                        <button
+                          style={styles.button}
+                          onClick={() => navigate(`/product/${item?.style_id}`)}
+                        >
+                          Go to Product
+                        </button>
+                      </div>
+                    );
+                  } else {
+                    return null;
+                  }
+                })}
+              </div>
+            )}
           </div>
         )}
       </div>
